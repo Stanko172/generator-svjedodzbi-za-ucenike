@@ -39,9 +39,47 @@ export default {
                 roman = (key[+digits.pop() + (i * 10)] || "") + roman;
             return Array(+digits.join("") + 1).join("M") + roman;
         },
+        getRegularGrades(){
+            const grades = this.students[0].grades
+
+            const regular_subjects = []
+            const regular_subjects_grade = []
+            
+
+            for (const [key, value] of Object.entries(grades.regular_subjects)) {
+                regular_subjects.push(key + '\n')
+                regular_subjects_grade.push(value + '\n')
+            }
+
+            return [regular_subjects, regular_subjects_grade]
+
+
+        },
+        getIrregularGrades(){
+            const grades = this.students[0].grades
+
+            const irregular_subjects = []
+            const irregular_subjects_grade = []
+
+            //Merging regular_subjects_choice and elective subjects
+            const regular_elective_subjects = {...grades.regular_subjects_choice, ...grades.elective_subjects}
+
+            for (const [key, value] of Object.entries(regular_elective_subjects)) {
+                irregular_subjects.push(key + '\n')
+                irregular_subjects_grade.push(value + '\n')
+            }
+
+            return [irregular_subjects, irregular_subjects_grade]
+        },
         downloadPDF(){
             const testStudent = this.students[0]
             const gradeConverted = this.convertGrade(testStudent.class_department.grade)
+
+            const regular_subjects_name = this.getRegularGrades()[0]
+            const regular_subjects_grade = this.getRegularGrades()[1]
+
+            const irregular_subjects_name = this.getIrregularGrades()[0]
+            const irregular_subjects_grade = this.getIrregularGrades()[1]
             
             var docDefinition = {
             //Background okvir
@@ -132,10 +170,12 @@ export default {
                                                         color: '#0e1111',
                                                         columns:[
                                                             {
-                                                                text: ['first inner column\n', 'first inner column']
+                                                                width: '70%',
+                                                                text: regular_subjects_name
                                                             },
                                                             {
-                                                                text: ['first inner column\n', 'first inner column']
+                                                                width: '30%',
+                                                                text: regular_subjects_grade
                                                             }
                                                         ]
                                                     },
@@ -144,10 +184,12 @@ export default {
                                                         color: '#0e1111',
                                                         columns:[
                                                             {
-                                                                text: ['first inner column\n', 'first inner column']
+                                                                width: '70%',
+                                                                text: irregular_subjects_name
                                                             },
                                                             {
-                                                                text: ['first inner column\n', 'first inner column']
+                                                                width: '30%',
+                                                                text: irregular_subjects_grade
                                                             }
                                                         ]
                                                     }
