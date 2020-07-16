@@ -19,6 +19,8 @@ export default [
         nationality: 'Hrvat',
         school:{
             name: 'OŠ CIM',
+            entity: 'Federacija Bosne i Hercegovine',
+            county: 'Hercegovačko-Neretvanska Županija Kanton',
             location: 'Mostar',
             city_community: 'Mostar',
             director: 'Marin Marić',
