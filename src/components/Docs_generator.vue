@@ -12,6 +12,8 @@ import students from '@/data/students.js';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
+import templateBorder from '@/data/templateBorder.js'
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default {
     data(){
@@ -39,6 +41,17 @@ export default {
                 roman = (key[+digits.pop() + (i * 10)] || "") + roman;
             return Array(+digits.join("") + 1).join("M") + roman;
         },
+        gradesToString(grade_number){
+            const stringGrades = {
+                2: 'dovoljan',
+                3: 'dobar',
+                4: 'vrlo dobar',
+                5: 'odličan' 
+            }
+
+            return stringGrades[grade_number]
+
+        },
         getRegularGrades(){
             const grades = this.students[0].grades
 
@@ -48,7 +61,7 @@ export default {
 
             for (const [key, value] of Object.entries(grades.regular_subjects)) {
                 regular_subjects.push(key + '\n')
-                regular_subjects_grade.push(value + '\n')
+                regular_subjects_grade.push(this.gradesToString(value) + ' (' + value + ')' + '\n')
             }
 
             return [regular_subjects, regular_subjects_grade]
@@ -66,7 +79,7 @@ export default {
 
             for (const [key, value] of Object.entries(regular_elective_subjects)) {
                 irregular_subjects.push(key + '\n')
-                irregular_subjects_grade.push(value + '\n')
+                irregular_subjects_grade.push(this.gradesToString(value) + ' (' + value + ')' + '\n')
             }
 
             return [irregular_subjects, irregular_subjects_grade]
@@ -83,6 +96,12 @@ export default {
             
             var docDefinition = {
             //Background okvir
+            pageSize: 'LETTER',
+            background: {
+                image: templateBorder,
+                 width: 595,
+                height: 800
+            },
             content: [
                 {
                     style: 'section',
