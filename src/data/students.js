@@ -60,7 +60,11 @@ export default [
         notes: [
             {
                 note_date: '2020-06-10T12:20:00.511Z',
-                note: 'Pohvala učiteljskog vijeća za odličan uspjeh i uzorno vladanje.'
+                note_description: 'Pohvala učiteljskog vijeća za odličan uspjeh i uzorno vladanje.'
+            },
+            {
+                note_date: '2020-06-11T12:20:00.511Z',
+                note_description: 'Pohvala učiteljskog vijeća za odličan uspjeh i uzorno vladanje.'
             }
         ],
         absent_hours: 8,
