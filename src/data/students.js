@@ -24,8 +24,9 @@ export default [
             location: 'Mostar',
             city_community: 'Mostar',
             director: 'Marin Marić',
-            school_register_number: 50,
-            shool_register_page: 100
+            register_type: 'Registar osnovnih škola ministarstva prosvjete, kulture, znanosti i sporta HNŽ-a',
+            register_number: 50,
+            register_page: 100
         },
         school_year: [2019, 2020],
         class_department: {
@@ -44,7 +45,6 @@ export default [
                 'Biologija': 5,
                 'Povijest': 5,
                 'Geografija': 5,
-                'Informatika': 5,
                 'Tehnička kultura': 5,
                 'Fizika': 5,
                 'Kemija': 5
@@ -69,6 +69,8 @@ export default [
         ],
         absent_hours: 8,
         unduly_hours: 0,
-        conduct: 'uzorno'
+        conduct: 'uzorno',
+        publishing_city: 'Mostar',
+        ur_number: '05-40-219-1 / 20'
     }
 ]
