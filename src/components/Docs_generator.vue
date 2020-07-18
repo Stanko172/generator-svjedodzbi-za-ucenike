@@ -105,6 +105,15 @@ export default {
 
             return classes[class_number]
         },
+        convertNotes(notes){
+            var notes_string = ''
+
+            notes.forEach(note => {
+                notes_string += '' + moment(note.note_date).format('DD.MM.YYYY') + ' ' + note.note_description + '\n'
+            })
+
+            return notes_string
+        },
         downloadPDF(){
             const testStudent = this.students[0]
             const gradeConverted = this.convertGrade(testStudent.class_department.grade)
@@ -183,6 +192,7 @@ export default {
                                 text: ['\n\n', 'Svjedodžba'.toUpperCase()],
                                 color: '#0e1111',
                                 fillColor: '#ffedcc',
+                                characterSpacing: 3.0,
                                 bold: true,
                                 fontSize: 20,
                                 }
@@ -312,6 +322,23 @@ export default {
                                                 }
                         
                                             ],
+                                        ]
+                                    }
+                                }
+                            ],
+                            //notes section table
+                            [
+                                {
+                                    table: {
+                                        widths: '*',
+                                        body: [
+                                            [
+                                                {
+                                                    alignment: 'left',
+                                                    text: [{color: '#0e1111',  fontSize: 10, text: 'Napomena\n'.toUpperCase()}, {color: '#0e1111', fontSize: 10, text: this.convertNotes(testStudent.notes)} ]
+                                                },
+                                                
+                                            ]
                                         ]
                                     }
                                 }
