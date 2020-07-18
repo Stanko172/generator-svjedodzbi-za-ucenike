@@ -1,15 +1,15 @@
 export default [
     {
-        firstName: 'Ivan',
-        lastName: 'Ivić',
+        first_name: 'Ivan',
+        last_name: 'Ivić',
         parents: {
             father: {
-                firstName: 'Marin',
-                lastName: 'Ivić'
+                first_name: 'Marin',
+                last_name: 'Ivić'
             },
             mother: {
-                firstName: 'Ana',
-                lastName: 'Ivić'
+                first_name: 'Ana',
+                last_name: 'Ivić'
             }
         },
         birthday: '2006-04-23T18:25:43.511Z',
