@@ -47,15 +47,30 @@ export default {
                 roman = (key[+digits.pop() + (i * 10)] || "") + roman;
             return Array(+digits.join("") + 1).join("M") + roman;
         },
-        gradesToString(grade_number){
-            const stringGrades = {
-                2: 'dovoljan',
-                3: 'dobar',
-                4: 'vrlo dobar',
-                5: 'odličan' 
-            }
+        gradesToString(grade_number, option){
 
-            return stringGrades[grade_number]
+            if(option === 1){
+
+                const stringGrades = {
+                    2: 'dovoljan',
+                    3: 'dobar',
+                    4: 'vrlo dobar',
+                    5: 'odličan' 
+                }
+
+                return stringGrades[grade_number]
+
+            }else if(option === 2){
+
+                const stringGrades = {
+                    2: 'dovoljnim',
+                    3: 'dobrim',
+                    4: 'vrlo dobrim',
+                    5: 'odličnim' 
+                }
+
+                return stringGrades[grade_number]
+            }
 
         },
         getRegularGrades(){
@@ -67,7 +82,7 @@ export default {
 
             for (const [key, value] of Object.entries(grades.regular_subjects)) {
                 regular_subjects.push(key + '\n')
-                regular_subjects_grade.push(this.gradesToString(value) + ' (' + value + ')' + '\n')
+                regular_subjects_grade.push(this.gradesToString(value, 1) + ' (' + value + ')' + '\n')
             }
 
             return [regular_subjects, regular_subjects_grade]
@@ -85,7 +100,7 @@ export default {
 
             for (const [key, value] of Object.entries(regular_elective_subjects)) {
                 irregular_subjects.push(key + '\n')
-                irregular_subjects_grade.push(this.gradesToString(value) + ' (' + value + ')' + '\n')
+                irregular_subjects_grade.push(this.gradesToString(value, 1) + ' (' + value + ')' + '\n')
             }
 
             return [irregular_subjects, irregular_subjects_grade]
@@ -114,15 +129,29 @@ export default {
 
             return notes_string
         },
+        ar_mean(grades){
+            const grades_extended = {...grades.regular_subjects, ...grades.regular_subjects_choice, ...grades.elective_subjects}
+
+            var sum = 0
+            var gr_length = 0
+
+            sum = Object.values(grades_extended).reduce((a, b) => a + b, 0)
+            gr_length = Object.keys(grades_extended).length
+
+            return sum / gr_length
+        },
         downloadPDF(){
             const testStudent = this.students[0]
             const gradeConverted = this.convertGrade(testStudent.class_department.grade)
+            const studentSuccess = this.ar_mean(testStudent.grades)
 
             const regular_subjects_name = this.getRegularGrades()[0]
             const regular_subjects_grade = this.getRegularGrades()[1]
 
             const irregular_subjects_name = this.getIrregularGrades()[0]
             const irregular_subjects_grade = this.getIrregularGrades()[1]
+
+            console.log(this.ar_mean(testStudent.grades))
             
             var docDefinition = {
             //Background okvir
@@ -130,7 +159,7 @@ export default {
             background: {
                 image: templateBorder,
                  width: 595,
-                height: 800
+                height: 790
             },
             content: [
                 {
@@ -342,7 +371,63 @@ export default {
                                         ]
                                     }
                                 }
-                            ]
+                            ],
+                            [
+                                {   color: '#0e1111',
+                                    fontSize: 10, 
+                                    lineHeight: 1.2,
+                                    alignment: 'left',
+                                    text: [
+                                        {text: '\nizostao/la je ' + testStudent.absent_hours + ' opravdano i ' + testStudent.unduly_hours + ' neopravdano'},
+                                        {text: '\nVladanje: ' + testStudent.conduct},
+                                        {bold: true, text: '\nUčenik/ca je završio/la ' + this.classToString(gradeConverted) + '(' + this.romanize(gradeConverted) + ') razred ' + testStudent.class_department.grade.split(" ")[2] + ' škole ' + this.gradesToString(parseInt(studentSuccess), 2) + ' (' + studentSuccess + ')' + ' uspjehom.'},
+                                        {text: '\nškola je upisana u ' + testStudent.school.register_type + ' pod brojem ' + testStudent.school.register_number + ' na stranici ' + testStudent.register_number}
+                                        ]
+                                },
+                                
+                            ],
+                            [
+                                {
+                                    fontSize: 10,
+                                    color: '#0e1111',
+                                    alignment: 'left',
+                                    columns: [
+                                        {
+                                          text: testStudent.publishing_city + ', ' + moment(new Date()).format('DD.MM.YYYY') + ' godine'
+                                        },
+                                        {
+                                          text: 'Urudžbeni broj: ' + testStudent.ur_number + '\n\n\n'
+                                        },
+                                    ],
+                                    columnGap: 190
+                                }
+                            ],
+                            [
+                                {
+                                    fontSize: 12,
+                                    color: '#0e1111',
+                                    alignment: 'center',
+                                    columns: [
+                                        {
+                                          text: 'Razrednik/ca: ' + testStudent.class_department.headroom_teacher
+                                        },
+                                        {
+                                          text: 'Ravnatelj/ica: ' + testStudent.school.director
+                                        },
+                                    ],
+                                    columnGap: 130
+                                }
+                            ],
+                            //Dodati info sekciju u dnu svjedodzbe
+                            [ 
+                                {
+                                text: '\n\n',
+                                color: '#0e1111',
+                                fillColor: '#ffedcc',
+                                fontSize: 10
+                                }
+                            ],
+
                         ]
                     },
                     layout: 'noBorders'
