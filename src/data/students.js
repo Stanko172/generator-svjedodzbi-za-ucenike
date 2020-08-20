@@ -14,6 +14,7 @@ export default [
         },
         birthday: '2006-04-23T18:25:43.511Z',
         birth_place: 'Mostar',
+        gender: "muško",
         city_community: 'Mostar',
         country: 'BiH',
         nationality: 'Hrvat',
@@ -24,6 +25,7 @@ export default [
             location: 'Mostar',
             city_community: 'Mostar',
             director: 'Marin Marić',
+            director_gender: 'muško',
             register_type: 'Registar osnovnih škola ministarstva prosvjete, kulture, znanosti i sporta HNŽ-a',
             register_number: 50,
             register_page: 100
@@ -31,7 +33,8 @@ export default [
         school_year: [2019, 2020],
         class_department: {
             grade: '8. razred osnovne škole',
-            headroom_teacher: 'Ivana Ivanović'
+            headroom_teacher: 'Ivana Ivanović',
+            headroom_teacher_gender: 'žensko'
         },
         taken: 1,
         grades:{
