@@ -2,10 +2,8 @@
     <div>
         <h1>Docs generator</h1>
 
-        <v-btn class="primary" @click="downloadPDF">Download pdf</v-btn>
-
-
-        <hr />
+        <v-btn class="primary" @click="test">Download pdf</v-btn><br><br>
+        <v-btn class="primary" @click="test2">Preview pdf</v-btn>
 
     </div>
 </template>
@@ -105,7 +103,7 @@ export default {
 
             return [irregular_subjects, irregular_subjects_grade]
         },
-        classToString(class_number){
+        classToString(class_number, option){
             const classes = {
                 1: 'prvi',
                 2: 'drugi',
@@ -118,7 +116,20 @@ export default {
                 9: 'deveti',
             }
 
-            return classes[class_number]
+            const classes2 = {
+                1: 'prvom',
+                2: 'drugom',
+                3: 'trećem',
+                4: 'četvrtom',
+                5: 'petom',
+                6: 'šestom',
+                7: 'sedmom',
+                8: 'osmom',
+                9: 'devetom',
+            }
+
+            if(option === 1){ return classes[class_number] }
+            else if(option === 2){ return classes2[class_number] }
         },
         convertNotes(notes){
             var notes_string = ''
@@ -168,8 +179,8 @@ export default {
                     }
             }
         },
-        downloadPDF(){
-            const testStudent = this.students[0]
+        define_doc(student){
+            const testStudent = student
             const gradeConverted = this.convertGrade(testStudent.class_department.grade)
             const studentSuccess = this.ar_mean(testStudent.grades)
 
@@ -256,7 +267,7 @@ export default {
                             ],
                             [
                                 {
-                                text: 'o završenom ' + gradeConverted + '(' + this.romanize(gradeConverted) + ')' + ' razredu\n\n\n',
+                                text: 'o završenom ' + this.classToString(gradeConverted, 2) + '(' + this.romanize(gradeConverted) + ')' + ' razredu\n\n\n',
                                 color: '#0e1111',
                                 fillColor: '#ffedcc',
                                 bold: true,
@@ -288,7 +299,7 @@ export default {
                                           text:['rođe' + this.male_female(1, testStudent.gender) + ': ', {text:  moment('2006-04-23T18:25:43.511Z').format('DD.MM'), fontSize: 12}]
                                         },
                                     ],
-                                    columnGap: 130
+                                    columnGap: 150
                                 }
                             ],
                             [
@@ -331,7 +342,7 @@ export default {
                                     alignment: 'center',
                                     columns: [
                                         {
-                                          text:['pohađa' + this.male_female(2, testStudent.gender) +  ' je u školskoj : ' + testStudent.school_year[0] + '/' + testStudent.school_year[1] + ' godini ' + this.classToString(gradeConverted) + ' (' + this.romanize(gradeConverted) + ') ' + ' razred ' + this.classToString(testStudent.taken) + ' put i pokaza' + this.male_female(2, testStudent.gender) + ' ovaj uspjeh: \n\n']
+                                          text:['pohađa' + this.male_female(2, testStudent.gender) +  ' je u školskoj : ' + testStudent.school_year[0] + '/' + testStudent.school_year[1] + ' godini ' + this.classToString(gradeConverted, 1) + ' (' + this.romanize(gradeConverted) + ') ' + ' razred ' + this.classToString(testStudent.taken, 1) + ' put i pokaza' + this.male_female(2, testStudent.gender) + ' ovaj uspjeh: \n\n']
                                         }
                                     ]
                                 }
@@ -408,7 +419,7 @@ export default {
                                     text: [
                                         {text: '\nizosta' + this.male_female(2, testStudent.gender) + ' je '  + testStudent.absent_hours + ' opravdano i ' + testStudent.unduly_hours + ' neopravdano'},
                                         {text: '\nVladanje: ' + testStudent.conduct},
-                                        {bold: true, text: '\nUčeni' + this.male_female(3, testStudent.gender) + ' je završi' + this.male_female(2, testStudent.gender) + ' ' + this.classToString(gradeConverted) + '(' + this.romanize(gradeConverted) + ') razred ' + testStudent.class_department.grade.split(" ")[2] + ' škole ' + this.gradesToString(parseInt(studentSuccess), 2) + ' (' + studentSuccess + ')' + ' uspjehom.'},
+                                        {bold: true, text: '\nUčeni' + this.male_female(3, testStudent.gender) + ' je završi' + this.male_female(2, testStudent.gender) + ' ' + this.classToString(gradeConverted, 1) + '(' + this.romanize(gradeConverted) + ') razred ' + testStudent.class_department.grade.split(" ")[2] + ' škole ' + this.gradesToString(parseInt(studentSuccess), 2) + ' (' + studentSuccess + ')' + ' uspjehom.'},
                                         {text: '\nškola je upisana u ' + testStudent.school.register_type + ' pod brojem ' + testStudent.school.register_number + ' na stranici ' + testStudent.school.register_page}
                                         ]
                                 },
@@ -477,7 +488,27 @@ export default {
             }
         }
 
-            pdfMake.createPdf(docDefinition).open();
+            //pdfMake.createPdf(docDefinition).open();
+            //pdfMake.createPdf(docDefinition).download();
+
+            return docDefinition;
+        },
+        previewPDF(students){
+            students.forEach( student =>{
+               pdfMake.createPdf(this.define_doc(student)).open();
+            })
+        },
+        downloadPDF(students){
+            students.forEach( student =>{
+               pdfMake.createPdf(this.define_doc(student)).download();
+            })
+        },
+        //Metoda za testiranje generatora, koristi niz koji se sastoji os studenata(objekti) za koje treba generirati svjedodžbe
+        test(){
+            this.downloadPDF(this.students);
+        },
+        test2(){
+            this.previewPDF(this.students);
         }
     }
 }
