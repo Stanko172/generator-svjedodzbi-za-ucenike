@@ -140,6 +140,34 @@ export default {
 
             return sum / gr_length
         },
+        male_female(option, gender){
+            switch(option){
+                case 1:
+                    if(gender === "muško"){
+                        return "n"
+                    }else{
+                        return "na"
+                    }
+                case 2:
+                    if(gender === "muško"){
+                        return "o"
+                    }else{
+                        return "la"
+                    }
+                case 3:
+                    if(gender === "muško"){
+                        return "k"
+                    }else{
+                        return "ca"
+                    }
+                case 4:
+                    if(gender === "muško"){
+                        return "lj" 
+                    }else{
+                        return "ca"
+                    }
+            }
+        },
         downloadPDF(){
             const testStudent = this.students[0]
             const gradeConverted = this.convertGrade(testStudent.class_department.grade)
@@ -257,7 +285,7 @@ export default {
                                           text:['roditelji: ', {text: testStudent.parents.father.first_name + ' i ' + testStudent.parents.mother.first_name, fontSize: 12}]
                                         },
                                         {
-                                          text:['rođen/a: ', {text:  moment('2006-04-23T18:25:43.511Z').format('DD.MM'), fontSize: 12}]
+                                          text:['rođe' + this.male_female(1, testStudent.gender) + ': ', {text:  moment('2006-04-23T18:25:43.511Z').format('DD.MM'), fontSize: 12}]
                                         },
                                     ],
                                     columnGap: 130
@@ -303,7 +331,7 @@ export default {
                                     alignment: 'center',
                                     columns: [
                                         {
-                                          text:['pohađao/la je u školskoj : ' + testStudent.school_year[0] + '/' + testStudent.school_year[1] + ' godini ' + this.classToString(gradeConverted) + ' (' + this.romanize(gradeConverted) + ') ' + ' razred ' + this.classToString(testStudent.taken) + ' put i pokazao/la ovaj uspjeh: \n\n']
+                                          text:['pohađa' + this.male_female(2, testStudent.gender) +  ' je u školskoj : ' + testStudent.school_year[0] + '/' + testStudent.school_year[1] + ' godini ' + this.classToString(gradeConverted) + ' (' + this.romanize(gradeConverted) + ') ' + ' razred ' + this.classToString(testStudent.taken) + ' put i pokaza' + this.male_female(2, testStudent.gender) + ' ovaj uspjeh: \n\n']
                                         }
                                     ]
                                 }
@@ -378,10 +406,10 @@ export default {
                                     lineHeight: 1.2,
                                     alignment: 'left',
                                     text: [
-                                        {text: '\nizostao/la je ' + testStudent.absent_hours + ' opravdano i ' + testStudent.unduly_hours + ' neopravdano'},
+                                        {text: '\nizosta' + this.male_female(2, testStudent.gender) + ' je '  + testStudent.absent_hours + ' opravdano i ' + testStudent.unduly_hours + ' neopravdano'},
                                         {text: '\nVladanje: ' + testStudent.conduct},
-                                        {bold: true, text: '\nUčenik/ca je završio/la ' + this.classToString(gradeConverted) + '(' + this.romanize(gradeConverted) + ') razred ' + testStudent.class_department.grade.split(" ")[2] + ' škole ' + this.gradesToString(parseInt(studentSuccess), 2) + ' (' + studentSuccess + ')' + ' uspjehom.'},
-                                        {text: '\nškola je upisana u ' + testStudent.school.register_type + ' pod brojem ' + testStudent.school.register_number + ' na stranici ' + testStudent.register_number}
+                                        {bold: true, text: '\nUčeni' + this.male_female(3, testStudent.gender) + ' je završi' + this.male_female(2, testStudent.gender) + ' ' + this.classToString(gradeConverted) + '(' + this.romanize(gradeConverted) + ') razred ' + testStudent.class_department.grade.split(" ")[2] + ' škole ' + this.gradesToString(parseInt(studentSuccess), 2) + ' (' + studentSuccess + ')' + ' uspjehom.'},
+                                        {text: '\nškola je upisana u ' + testStudent.school.register_type + ' pod brojem ' + testStudent.school.register_number + ' na stranici ' + testStudent.school.register_page}
                                         ]
                                 },
                                 
@@ -409,10 +437,10 @@ export default {
                                     alignment: 'center',
                                     columns: [
                                         {
-                                          text: 'Razrednik/ca: ' + testStudent.class_department.headroom_teacher
+                                          text: 'Razredni' + this.male_female(3, testStudent.class_department.headroom_teacher_gender) + ': ' + testStudent.class_department.headroom_teacher
                                         },
                                         {
-                                          text: 'Ravnatelj/ica: ' + testStudent.school.director
+                                          text: 'Ravnate' + this.male_female(4, testStudent.school.director_gender) + ': '  + testStudent.school.director
                                         },
                                     ],
                                     columnGap: 130
